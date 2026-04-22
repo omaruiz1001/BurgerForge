@@ -1164,3 +1164,133 @@ body.drawer-open { overflow: hidden; }
   background: var(--orange-dim);
   transform: scale(1.03);
 }
+
+/* ════ HISTORIA DE LA MARCA ════ */
+.about {
+  padding: 96px 0;
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Círculo decorativo de fondo */
+.about::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,69,0,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .about__grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+}
+
+/* Imagen */
+.about__img-wrap {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 420px;
+}
+.about__img-wrap img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.about__img-wrap:hover img { transform: scale(1.04); }
+
+/* Línea decorativa naranja sobre la imagen */
+.about__img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--orange);
+}
+
+/* Año fundación — badge sobre la imagen */
+.about__year {
+  position: absolute;
+  bottom: 24px; right: 24px;
+  background: rgba(10,10,10,0.9);
+  border: 1px solid rgba(255,69,0,0.4);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  text-align: center;
+}
+.about__year-num {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: var(--orange);
+  line-height: 1;
+}
+.about__year-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Contenido de texto */
+.about__content { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.about__text {
+  font-size: 0.975rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* Badges de valores */
+.about__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0.5rem;
+}
+.value-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,69,0,0.08);
+  border: 1px solid rgba(255,69,0,0.25);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--white);
+}
+.value-badge__icon {
+  font-size: 0.9rem;
+}
+
+/* Estadísticas */
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.about__stat-num {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.about__stat-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}

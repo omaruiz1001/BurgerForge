@@ -62,29 +62,29 @@ const waFloatBtn = document.getElementById("wa-float-btn");
 
 let toastTimeout; // Para controlar el tiempo del toast
 
-function openDrawer()  {
-  drawerEl.classList.add('open');
-  overlayEl.classList.add('active');
-  document.body.classList.add('drawer-open');
-  cartBtn.setAttribute('aria-expanded', 'true');
+function openDrawer() {
+  drawerEl.classList.add("open");
+  overlayEl.classList.add("active");
+  document.body.classList.add("drawer-open");
+  cartBtn.setAttribute("aria-expanded", "true");
 }
 
 function closeDrawer() {
-  drawerEl.classList.remove('open');
-  overlayEl.classList.remove('active');
-  document.body.classList.remove('drawer-open');
-  cartBtn.setAttribute('aria-expanded', 'false');
+  drawerEl.classList.remove("open");
+  overlayEl.classList.remove("active");
+  document.body.classList.remove("drawer-open");
+  cartBtn.setAttribute("aria-expanded", "false");
 }
 cartBtn.addEventListener("click", openDrawer);
 drawerClose.addEventListener("click", closeDrawer);
 overlayEl.addEventListener("click", closeDrawer);
-document.addEventListener("keydown", e => {
+document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeDrawer();
 });
 
 // Logica del carrito
 function addToCart(productId, customPrice = null) {
-  const product = PRODUCTS.find(p => p.id === productId);
+  const product = PRODUCTS.find((p) => p.id === productId);
   if (!product) return;
 
   // Si viene un precio personalizado (desde el modal) lo usamos,
@@ -111,23 +111,26 @@ function changeQty(productId, delta) {
   if (item.qty <= 0) cart.delete(productId);
   updateCartUI();
 }
-function clearCart() { cart.clear(); updateCartUI(); }
+function clearCart() {
+  cart.clear();
+  updateCartUI();
+}
 
 function updateCartUI() {
-  const items    = [...cart.values()];
+  const items = [...cart.values()];
   const totalQty = items.reduce((a, i) => a + i.qty, 0);
-  const subtotal = items.reduce((a, i) => a + i.price * i.qty, 0);  
-  const total    = subtotal + (subtotal > 0 ? DELIVERY_FEE : 0);
+  const subtotal = items.reduce((a, i) => a + i.price * i.qty, 0);
+  const total = subtotal + (subtotal > 0 ? DELIVERY_FEE : 0);
 
-  cartCountEl.textContent  = totalQty;
-  drawerCount.textContent  = `${totalQty} item${totalQty !== 1 ? 's' : ''}`;
-  subtotalEl.textContent   = `S/ ${subtotal.toFixed(2)}`;
+  cartCountEl.textContent = totalQty;
+  drawerCount.textContent = `${totalQty} item${totalQty !== 1 ? "s" : ""}`;
+  subtotalEl.textContent = `S/ ${subtotal.toFixed(2)}`;
   totalPriceEl.textContent = `S/ ${total.toFixed(2)}`;
-  whatsappBtn.disabled     = totalQty === 0;
-  clearBtn.style.display   = totalQty === 0 ? 'none' : 'block';
+  whatsappBtn.disabled = totalQty === 0;
+  clearBtn.style.display = totalQty === 0 ? "none" : "block";
 
-  cartCountEl.classList.add('bump');
-  setTimeout(() => cartCountEl.classList.remove('bump'), 300);
+  cartCountEl.classList.add("bump");
+  setTimeout(() => cartCountEl.classList.remove("bump"), 300);
 
   renderDrawerItems(items);
 }
@@ -142,7 +145,9 @@ function renderDrawerItems(items) {
       </div>`;
     return;
   }
- drawerItems.innerHTML = items.map(({ product, qty, price }) => `
+  drawerItems.innerHTML = items
+    .map(
+      ({ product, qty, price }) => `
     <div class="cart-item">
       <img class="cart-item__img" src="${product.img}" alt="${product.alt}" loading="lazy"/>
       <div>
@@ -154,16 +159,18 @@ function renderDrawerItems(items) {
         <span class="qty-num">${qty}</span>
         <button class="qty-btn plus" data-id="${product.id}" data-delta="1">+</button>
       </div>
-    </div>`).join('');
+    </div>`,
+    )
+    .join("");
 }
 
-drawerItems.addEventListener('click', e => {
-  const btn = e.target.closest('.qty-btn');
+drawerItems.addEventListener("click", (e) => {
+  const btn = e.target.closest(".qty-btn");
   if (!btn) return;
   changeQty(parseInt(btn.dataset.id), parseInt(btn.dataset.delta));
 });
 
-clearBtn.addEventListener('click', clearCart);
+clearBtn.addEventListener("click", clearCart);
 
 function buildWhatsAppURL() {
   const items = [...cart.values()];
@@ -172,8 +179,9 @@ function buildWhatsAppURL() {
   const lines = [
     "🍔 *Pedido — Burger Forge*",
     "─────────────────────",
-    ...items.map(({ product, qty, price }) =>
-      `• ${product.name} x${qty} — S/ ${(price * qty).toFixed(2)}`
+    ...items.map(
+      ({ product, qty, price }) =>
+        `• ${product.name} x${qty} — S/ ${(price * qty).toFixed(2)}`,
     ),
     "─────────────────────",
     `📦 Delivery: S/ ${DELIVERY_FEE.toFixed(2)}`,
@@ -201,11 +209,11 @@ function showToast(msg) {
 }
 
 function renderMenu() {
-  const grid = document.getElementById('menu-grid');
-  PRODUCTS.forEach(product => {
-    const card = document.createElement('article');
-    card.className = 'menu-card';
-    card.setAttribute('role', 'listitem');
+  const grid = document.getElementById("menu-grid");
+  PRODUCTS.forEach((product) => {
+    const card = document.createElement("article");
+    card.className = "menu-card";
+    card.setAttribute("role", "listitem");
     card.innerHTML = `
       <div class="menu-card__img-wrap">
         <img src="${product.img}" alt="${product.alt}" loading="lazy" width="600" height="220"/>
@@ -228,13 +236,12 @@ function renderMenu() {
     grid.appendChild(card);
   });
 }
-document.getElementById('menu-grid').addEventListener('click', e => {
-  const btn = e.target.closest('.add-btn');
+document.getElementById("menu-grid").addEventListener("click", (e) => {
+  const btn = e.target.closest(".add-btn");
   if (!btn) return;
-  const product = PRODUCTS.find(p => p.id === parseInt(btn.dataset.id));
+  const product = PRODUCTS.find((p) => p.id === parseInt(btn.dataset.id));
   if (product) openModal(product);
 });
-
 
 /* ════ ANIMACIONES DE SCROLL — Intersection Observer ════ */
 
@@ -243,17 +250,20 @@ document.getElementById('menu-grid').addEventListener('click', e => {
  * entra en el viewport y le agrega la clase .visible
  * que dispara la animación CSS.
  */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      // Una vez animado, dejamos de observarlo
-      observer.unobserve(entry.target);
-    }
-  });
-}, {
-  threshold: 0.15  // se activa cuando el 15% del elemento es visible
-});
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        // Una vez animado, dejamos de observarlo
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.15, // se activa cuando el 15% del elemento es visible
+  },
+);
 
 /*
  * Aplicamos la clase .reveal y los delays a los elementos
@@ -261,34 +271,44 @@ const observer = new IntersectionObserver((entries) => {
  * para que las tarjetas ya existan en el DOM.
  */
 function initScrollAnimations() {
-
   // Tarjetas del menú — efecto escalonado
-  document.querySelectorAll('.menu-card').forEach((card, index) => {
-    card.classList.add('reveal');
-    if (index % 3 === 1) card.classList.add('reveal-delay-1');
-    if (index % 3 === 2) card.classList.add('reveal-delay-2');
+  document.querySelectorAll(".menu-card").forEach((card, index) => {
+    card.classList.add("reveal");
+    if (index % 3 === 1) card.classList.add("reveal-delay-1");
+    if (index % 3 === 2) card.classList.add("reveal-delay-2");
     observer.observe(card);
   });
 
-     // Tarjetas de reseñas — efecto escalonado
-  document.querySelectorAll('.review-card').forEach((card, index) => {
-    card.classList.add('reveal');
-    if (index % 3 === 1) card.classList.add('reveal-delay-1');
-    if (index % 3 === 2) card.classList.add('reveal-delay-2');
+  // Tarjetas de reseñas — efecto escalonado
+  document.querySelectorAll(".review-card").forEach((card, index) => {
+    card.classList.add("reveal");
+    if (index % 3 === 1) card.classList.add("reveal-delay-1");
+    if (index % 3 === 2) card.classList.add("reveal-delay-2");
     observer.observe(card);
   });
-  
 
   // Tarjetas de info (horarios y ubicación)
-  document.querySelectorAll('.info-card').forEach((card, index) => {
-    card.classList.add('reveal');
-    if (index === 1) card.classList.add('reveal-delay-1');
+  document.querySelectorAll(".info-card").forEach((card, index) => {
+    card.classList.add("reveal");
+    if (index === 1) card.classList.add("reveal-delay-1");
     observer.observe(card);
   });
 
   // Títulos de secciones
-  document.querySelectorAll('.section-title').forEach(el => {
-    el.classList.add('reveal');
+  document.querySelectorAll(".section-title").forEach((el) => {
+    el.classList.add("reveal");
+    observer.observe(el);
+  });
+  // Elementos de la sección about
+  document
+    .querySelectorAll(".about__img-wrap, .about__content")
+    .forEach((el, index) => {
+      if (!el.classList.contains("reveal")) return; // ya tiene reveal desde el HTML
+      observer.observe(el);
+    });
+
+  // Para los que ya tienen reveal en el HTML
+  document.querySelectorAll(".reveal").forEach((el) => {
     observer.observe(el);
   });
 }
@@ -301,7 +321,7 @@ const REVIEWS = [
     avatar: "avatar-orange",
     stars: 5,
     date: "Hace 2 días",
-    text: "La BBQ Bacon es simplemente perfecta. La carne jugosa y el bacon crujiente hacen una combinación que no había probado igual en Lima."
+    text: "La BBQ Bacon es simplemente perfecta. La carne jugosa y el bacon crujiente hacen una combinación que no había probado igual en Lima.",
   },
   {
     name: "Valeria R.",
@@ -309,7 +329,7 @@ const REVIEWS = [
     avatar: "avatar-pink",
     stars: 5,
     date: "Hace 1 semana",
-    text: "Vine por la Veggie Master sin muchas expectativas y me sorprendió. Se nota que usan ingredientes frescos. Ya la pedí tres veces esta semana."
+    text: "Vine por la Veggie Master sin muchas expectativas y me sorprendió. Se nota que usan ingredientes frescos. Ya la pedí tres veces esta semana.",
   },
   {
     name: "Diego T.",
@@ -317,7 +337,7 @@ const REVIEWS = [
     avatar: "avatar-blue",
     stars: 4,
     date: "Hace 2 semanas",
-    text: "El ambiente es genial y las hamburguesas están a otro nivel. El delivery llegó rápido y caliente. Le faltó un poco más de salsa pero igual estaba riquísima."
+    text: "El ambiente es genial y las hamburguesas están a otro nivel. El delivery llegó rápido y caliente. Le faltó un poco más de salsa pero igual estaba riquísima.",
   },
   {
     name: "Sofía L.",
@@ -325,7 +345,7 @@ const REVIEWS = [
     avatar: "avatar-green",
     stars: 5,
     date: "Hace 3 semanas",
-    text: "La Clásica Forge tiene la salsa secreta más adictiva que he probado. Ya la recomendé a toda mi oficina y todos quedaron encantados."
+    text: "La Clásica Forge tiene la salsa secreta más adictiva que he probado. Ya la recomendé a toda mi oficina y todos quedaron encantados.",
   },
   {
     name: "Rodrigo P.",
@@ -333,7 +353,7 @@ const REVIEWS = [
     avatar: "avatar-purple",
     stars: 5,
     date: "Hace 1 mes",
-    text: "Pedí por WhatsApp y fue súper fácil. En 30 minutos tenía mi pedido en la puerta. Sin duda el mejor delivery de hamburguesas de Miraflores."
+    text: "Pedí por WhatsApp y fue súper fácil. En 30 minutos tenía mi pedido en la puerta. Sin duda el mejor delivery de hamburguesas de Miraflores.",
   },
   {
     name: "Camila F.",
@@ -341,19 +361,21 @@ const REVIEWS = [
     avatar: "avatar-orange",
     stars: 4,
     date: "Hace 1 mes",
-    text: "Las papas que vienen con el combo están espectaculares. La próxima vez quiero probar la BBQ Bacon. El precio es muy justo para la calidad que ofrecen."
-  }
+    text: "Las papas que vienen con el combo están espectaculares. La próxima vez quiero probar la BBQ Bacon. El precio es muy justo para la calidad que ofrecen.",
+  },
 ];
 
 function renderReviews() {
-  const grid = document.getElementById('reviews-grid');
+  const grid = document.getElementById("reviews-grid");
 
-  REVIEWS.forEach(review => {
-    const stars = Array(review.stars).fill('<span class="star">★</span>').join('');
+  REVIEWS.forEach((review) => {
+    const stars = Array(review.stars)
+      .fill('<span class="star">★</span>')
+      .join("");
 
-    const card = document.createElement('article');
-    card.className = 'review-card';
-    card.setAttribute('role', 'listitem');
+    const card = document.createElement("article");
+    card.className = "review-card";
+    card.setAttribute("role", "listitem");
 
     card.innerHTML = `
       <div class="review-card__stars" aria-label="${review.stars} de 5 estrellas">
@@ -378,61 +400,64 @@ function renderReviews() {
 /* ════ MODAL DE PRODUCTO ════ */
 
 const SIZES = [
-  { label: 'Individual', extra: 0 },
-  { label: 'Doble carne', extra: 8 },
+  { label: "Individual", extra: 0 },
+  { label: "Doble carne", extra: 8 },
 ];
 
 const EXTRAS = [
-  { label: 'Bacon extra',    price: 4 },
-  { label: 'Queso extra',    price: 3 },
-  { label: 'Aguacate',       price: 4 },
-  { label: 'Huevo frito',    price: 3 },
-  { label: 'Aros de cebolla',price: 3 },
-  { label: 'Salsa especial', price: 2 },
+  { label: "Bacon extra", price: 4 },
+  { label: "Queso extra", price: 3 },
+  { label: "Aguacate", price: 4 },
+  { label: "Huevo frito", price: 3 },
+  { label: "Aros de cebolla", price: 3 },
+  { label: "Salsa especial", price: 2 },
 ];
 
 /* Referencias del modal */
-const modalOverlay  = document.getElementById('modal-overlay');
-const modalClose    = document.getElementById('modal-close');
-const modalImg      = document.getElementById('modal-img');
-const modalBadge    = document.getElementById('modal-badge');
-const modalName     = document.getElementById('modal-name');
-const modalPrice    = document.getElementById('modal-price');
-const modalDesc     = document.getElementById('modal-desc');
-const modalSizes    = document.getElementById('modal-sizes');
-const modalExtras   = document.getElementById('modal-extras');
-const modalTotal    = document.getElementById('modal-total');
-const modalAddBtn   = document.getElementById('modal-add-btn');
+const modalOverlay = document.getElementById("modal-overlay");
+const modalClose = document.getElementById("modal-close");
+const modalImg = document.getElementById("modal-img");
+const modalBadge = document.getElementById("modal-badge");
+const modalName = document.getElementById("modal-name");
+const modalPrice = document.getElementById("modal-price");
+const modalDesc = document.getElementById("modal-desc");
+const modalSizes = document.getElementById("modal-sizes");
+const modalExtras = document.getElementById("modal-extras");
+const modalTotal = document.getElementById("modal-total");
+const modalAddBtn = document.getElementById("modal-add-btn");
 
-let activeProduct   = null;  // producto actualmente en el modal
-let selectedSize    = SIZES[0];  // tamaño seleccionado por defecto
+let activeProduct = null; // producto actualmente en el modal
+let selectedSize = SIZES[0]; // tamaño seleccionado por defecto
 
 /* Abre el modal con los datos del producto */
 function openModal(product) {
   activeProduct = product;
-  selectedSize  = SIZES[0];
+  selectedSize = SIZES[0];
 
   /* Llenar datos básicos */
-  modalImg.src        = product.img;
-  modalImg.alt        = product.alt;
+  modalImg.src = product.img;
+  modalImg.alt = product.alt;
   modalBadge.textContent = product.badge;
-  modalName.textContent  = product.name;
+  modalName.textContent = product.name;
   modalPrice.textContent = `S/ ${product.price}.00`;
-  modalDesc.textContent  = product.desc;
+  modalDesc.textContent = product.desc;
 
   /* Renderizar opciones de tamaño */
-  modalSizes.innerHTML = SIZES.map((size, i) => `
+  modalSizes.innerHTML = SIZES.map(
+    (size, i) => `
     <button
-      class="option-btn ${i === 0 ? 'selected' : ''}"
+      class="option-btn ${i === 0 ? "selected" : ""}"
       data-size-index="${i}"
     >
       ${size.label}
-      ${size.extra > 0 ? `<span style="color:var(--orange);font-size:0.78rem"> +S/${size.extra}</span>` : ''}
+      ${size.extra > 0 ? `<span style="color:var(--orange);font-size:0.78rem"> +S/${size.extra}</span>` : ""}
     </button>
-  `).join('');
+  `,
+  ).join("");
 
   /* Renderizar extras */
-  modalExtras.innerHTML = EXTRAS.map((extra, i) => `
+  modalExtras.innerHTML = EXTRAS.map(
+    (extra, i) => `
     <label class="extra-item">
       <input type="checkbox" data-extra-index="${i}" />
       <div class="extra-item__info">
@@ -440,19 +465,20 @@ function openModal(product) {
         <p class="extra-item__price">+S/ ${extra.price}.00</p>
       </div>
     </label>
-  `).join('');
+  `,
+  ).join("");
 
   updateModalTotal();
 
   /* Mostrar */
-  modalOverlay.classList.add('active');
-  document.body.classList.add('drawer-open');
+  modalOverlay.classList.add("active");
+  document.body.classList.add("drawer-open");
 }
 
 /* Cierra el modal */
 function closeModal() {
-  modalOverlay.classList.remove('active');
-  document.body.classList.remove('drawer-open');
+  modalOverlay.classList.remove("active");
+  document.body.classList.remove("drawer-open");
   activeProduct = null;
 }
 
@@ -460,39 +486,45 @@ function closeModal() {
 function updateModalTotal() {
   if (!activeProduct) return;
 
-  const extrasTotal = [...modalExtras.querySelectorAll('input:checked')]
-    .reduce((acc, input) => acc + EXTRAS[parseInt(input.dataset.extraIndex)].price, 0);
+  const extrasTotal = [...modalExtras.querySelectorAll("input:checked")].reduce(
+    (acc, input) => acc + EXTRAS[parseInt(input.dataset.extraIndex)].price,
+    0,
+  );
 
   const total = activeProduct.price + selectedSize.extra + extrasTotal;
   modalTotal.textContent = `S/ ${total.toFixed(2)}`;
 }
 
 /* Eventos del modal */
-modalClose.addEventListener('click', closeModal);
-modalOverlay.addEventListener('click', e => {
+modalClose.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => {
   if (e.target === modalOverlay) closeModal();
 });
 
 /* Cambio de tamaño */
-modalSizes.addEventListener('click', e => {
-  const btn = e.target.closest('.option-btn');
+modalSizes.addEventListener("click", (e) => {
+  const btn = e.target.closest(".option-btn");
   if (!btn) return;
-  modalSizes.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
+  modalSizes
+    .querySelectorAll(".option-btn")
+    .forEach((b) => b.classList.remove("selected"));
+  btn.classList.add("selected");
   selectedSize = SIZES[parseInt(btn.dataset.sizeIndex)];
   updateModalTotal();
 });
 
 /* Cambio de extras */
-modalExtras.addEventListener('change', updateModalTotal);
+modalExtras.addEventListener("change", updateModalTotal);
 
 /* Botón agregar al carrito desde el modal */
-modalAddBtn.addEventListener('click', () => {
+modalAddBtn.addEventListener("click", () => {
   if (!activeProduct) return;
 
   // Calculamos el precio final con tamaño + extras
-  const extrasTotal = [...modalExtras.querySelectorAll('input:checked')]
-    .reduce((acc, input) => acc + EXTRAS[parseInt(input.dataset.extraIndex)].price, 0);
+  const extrasTotal = [...modalExtras.querySelectorAll("input:checked")].reduce(
+    (acc, input) => acc + EXTRAS[parseInt(input.dataset.extraIndex)].price,
+    0,
+  );
 
   const finalPrice = activeProduct.price + selectedSize.extra + extrasTotal;
 
