@@ -533,6 +533,23 @@ modalAddBtn.addEventListener("click", () => {
   closeModal();
 });
 
+/* ════ BOTÓN VOLVER ARRIBA ════ */
+const backTopBtn = document.getElementById('back-top');
+
+// Mostrar el botón cuando el usuario baja más de 400px
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 400) {
+    backTopBtn.classList.add('visible');
+  } else {
+    backTopBtn.classList.remove('visible');
+  }
+}, { passive: true });
+
+// Al hacer clic sube suavemente al inicio
+backTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 // Llamar después de que el menú ya está renderizado
 
 /* ── INIT ── */

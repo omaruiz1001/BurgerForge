@@ -1294,3 +1294,33 @@ body.drawer-open { overflow: hidden; }
   color: var(--muted);
   line-height: 1.4;
 }
+
+/* ════ BOTÓN VOLVER ARRIBA ════ */
+.back-top {
+  position: fixed;
+  bottom: 100px; right: 28px;
+  z-index: 150;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition),
+              background var(--transition), border-color var(--transition);
+}
+.back-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.back-top:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+}
